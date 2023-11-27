@@ -38,7 +38,8 @@
         subtree: true,
     });
     async function setItemSort() {
-        let libdata = await ApiClient.getItems(ApiClient.getCurrentUserId());
+        // let libdata = await ApiClient.getItems(ApiClient.getCurrentUserId());
+        let libdata = await ApiClient.getUserViews({}, ApiClient.getCurrentUserId());
         for (let item of libdata.Items) {
             let types = sort[item.CollectionType];
             if (types) {
