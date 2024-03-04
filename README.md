@@ -7,3 +7,5 @@
 - 效果说明：
 - 1、itemSortForNewDevice：修改新设备媒体库各标签默认排序;
 - 2、actorPlus：隐藏没有头像的演员和制作人员;
+- 3、emby-swiper：主页轮播图；
+- 4、fanart_show: 显示同人图fanart图
