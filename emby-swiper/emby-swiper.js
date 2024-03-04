@@ -20,10 +20,10 @@ class CommonUtils {
             }, ms);
         });
     }
-    static loadExtastyle(content) {
+    static loadExtastyle(content,id) {
         let style = document.createElement("style");
         style.type = "text/css";
-        style.id = "customCss";
+        style.id = id;
         style.innerHTML = content;
         document.head.appendChild(style);
     }
