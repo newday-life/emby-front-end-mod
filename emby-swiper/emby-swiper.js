@@ -309,7 +309,7 @@ class HomeSwiper {
           
           .swiper-slide .text {
             font-size: 20px;
-            max-width: 30vw;
+            max-width: 26vw;
             line-height: 1.3;
             text-align: left;
           }
