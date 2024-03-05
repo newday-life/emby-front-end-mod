@@ -309,11 +309,15 @@ class HomeSwiper {
           
           .swiper-slide .text {
             font-size: 20px;
-            max-width: 26vw;
+            max-width: 30vw;
             line-height: 1.3;
             text-align: left;
           }
-          
+          @media (min-width: 2560px){
+            .swiper-slide .text {
+              max-width: 26vw;
+            }
+          }
           .custom>* {
             transition: all 1.5s cubic-bezier(0, 1.41, 0.36, 0.93) 0.4s;
             transform: translateY(150%);
