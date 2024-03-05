@@ -1084,10 +1084,16 @@ class HomeSwiper {
     /* 初始事件 */
     static async initEvent() {
         //鼠标滑过pagination和略缩图控制swiper切换
+	var mouseoverflag = false;
         for (let i = 0; i < this.swiper.slides.length; i++) {
-            this.swiper2.pagination.bullets.length > 0 && (this.swiper2.pagination.bullets[i].onmouseover = function () {
-                this.click();
-            });
+            this.swiper2.pagination.bullets[i].onmouseover = function () {
+                mouseoverflag = true;
+		this.click();
+            };
+            this.swiper2.pagination.bullets[i].onclick = function () {
+		!mouseoverflag && (i === this.swiper2.realIndex) && Emby.Page.showItem(this.swiper.slides[i].firstElementChild.id);
+		mouseoverflag = false;
+	    }.bind(this)
             this.swiper.slides[i].onmouseover = function () {
                 this.swiper2.autoplay.stop();
                 this.mouseovertimeout = setTimeout(function () {
