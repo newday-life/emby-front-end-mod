@@ -262,7 +262,7 @@ class Stagephoto {
 
 		if (this.item.length == 0) {
 			document.getElementById("stagephotoCss").remove();
-			document.querySelector(".stagephotoSection").remove();
+			document.querySelector(".itemView:not(.hide) .stagephotoSection").remove();
 			return;
 		}
 		var html = "";
@@ -294,7 +294,7 @@ class Stagephoto {
 			});
 			if (this.Backdrop.length == 0) {
 				document.getElementById("stagephotoCss").remove();
-				document.querySelector(".stagephotoSection").remove();
+				document.querySelector(".itemView:not(.hide) .stagephotoSection").remove();
 				return;
 			}
 			for (let index = 0; index < this.Backdrop.length; ++index) {
