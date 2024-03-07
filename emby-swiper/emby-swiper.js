@@ -462,7 +462,7 @@ class HomeSwiper {
           
           @media not all and (min-width: 50em) {
             .section00 {
-              height: min(100vh, 148.5vw) !important;
+              height: min(80vh, 148.5vw) !important;
             }
           
             .misty-loading h1 {
