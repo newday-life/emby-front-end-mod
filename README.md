@@ -9,7 +9,9 @@
 2. 将XXX.js文件下载放在index.html同级目录中，非window记得授权可读。
 
 ## 效果说明：
-  - 1、itemSortForNewDevice：修改新设备媒体库各标签默认排序;
-  - 2、actorPlus：隐藏没有头像的演员和制作人员;
-  - 3、emby-swiper：主页轮播图；
-  - 4、fanart_show: 显示同人图fanart图
+| 序号 | 名称 | 描述 |  
+| :---: | :--- | :--- |  
+| 1 | itemSortForNewDevice | 修改新设备媒体库各标签默认排序 |  
+| 2 | actorPlus | 隐藏没有头像的演员和制作人员 |  
+| 3 | emby-swiper | 主页轮播图 |  
+| 4 | fanart_show | 显示同人图（fanart图） |
