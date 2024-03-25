@@ -839,6 +839,14 @@ class HomeSwiper {
 					};
 				},
 				breakpoint: function (swiper) {
+					if (swiper.params.slidesPerView > this.Alldata.length) {
+						swiper.params.loop = false;
+						swiper.wrapperEl.style["justify-content"] = "flex-end"
+
+					} else {
+						swiper.params.loop = true;
+						swiper.wrapperEl.style["justify-content"] = "flex-start";
+					}
 					if (swiper.params.slidesPerView === 1) {
 
 						document.querySelectorAll(".banner-cover").forEach(async function (element, index) {
