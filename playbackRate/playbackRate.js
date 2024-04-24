@@ -49,7 +49,6 @@
                 videoOsdVolumeSliderWrapper = viewnode.querySelector(".videoOsdVolumeSliderWrapper"),
                 nowPlayingVolumeSlider = viewnode.querySelector(".videoOsdVolumeSlider"),
                 nowPlayingSliderValue = view.nowPlayingPositionSlider.valueAsNumber;
-
             my_touches_type = null;
             my_touches_start = null;
             my_touches_value = 0;
@@ -57,13 +56,10 @@
             my_touches_rate = null;
             my_touches_time = null;
             dragByGuesture = false;
-
-
             viewnode.addEventListener("touchstart", touchstartEvent);
             viewnode.addEventListener("touchmove", touchmoveEvent);
             viewnode.addEventListener("touchcancel", touchcancelEvent);
             viewnode.addEventListener("touchend", touchendEvent);
-
         } else {
             window.removeEventListener("keydown", keydownEvent);
             window.removeEventListener("keyup", keyupEvent);
@@ -156,7 +152,6 @@
                         if (view.currentPlayer.getVolume() != my_touches_value) {
                             nowPlayingVolumeSlider.setValue(my_touches_value);
                             view.currentPlayer.setVolume(my_touches_value);
-                            console.log(view.currentPlayer.setVolume);
                         }
                     }
                     view.boundShowOsdDefaultParams();
@@ -198,7 +193,6 @@
             }
             my_touches_start = null;
             my_touches_type = null;
-
         }
         my_touches_start = null;
         if (my_touches_time != null) {
@@ -230,13 +224,11 @@
             }
             my_touches_start = null;
             my_touches_type = null;
-
         }
         my_touches_start = null;
         if (my_touches_time != null) {
             clearTimeout(my_touches_time);
             my_touches_time = null;
-
         }
         if (my_touches_rate != null) {
             view.currentPlayer.setPlaybackRate(1);
