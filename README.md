@@ -15,3 +15,4 @@
 | 2 | actorPlus | 隐藏没有头像的演员和制作人员 |  
 | 3 | emby-swiper | 主页轮播图 |  
 | 4 | fanart_show | 显示同人图（fanart图） |
+| 5 | playbackRate | 小秘同款播放页手势及按键交互体验 |
