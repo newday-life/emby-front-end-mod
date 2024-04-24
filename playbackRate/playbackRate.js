@@ -38,7 +38,6 @@
         "6": { rate: 4, message: "4.0 倍数" },
     };
     document.addEventListener("viewbeforeshow", function (e) {
-        console.log(e);
         if (e.detail.type === "video-osd") {
             window.addEventListener("keydown", keydownEvent);
             window.addEventListener("keyup", keyupEvent);
@@ -156,7 +155,8 @@
                         my_touches_value = Math.floor(my_touches_func(e.touches[0], y, my_touches_nowvalue, screen.height, false));
                         if (view.currentPlayer.getVolume() != my_touches_value) {
                             nowPlayingVolumeSlider.setValue(my_touches_value);
-                            view.currentPlayer.getVolume(my_touches_value);
+                            view.currentPlayer.setVolume(my_touches_value);
+                            console.log(view.currentPlayer.setVolume);
                         }
                     }
                     view.boundShowOsdDefaultParams();
@@ -183,7 +183,6 @@
     }
 
     function touchcancelEvent(e) {
-
         if (my_touches_start && (my_touches_value !== 0 || my_touches_type != null)) {
             if (my_touches_type === "play") {
                 nowPlayingSliderValue = my_touches_value;
@@ -213,7 +212,6 @@
         dragByGuesture = false;
     }
     function touchendEvent(e) {
-
         if (my_touches_start && (my_touches_value !== 0 || my_touches_type != null)) {
             if (my_touches_type === "play") {
                 window.navigator.vibrate(10);
