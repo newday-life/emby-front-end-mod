@@ -111,13 +111,12 @@
                     Math.abs(e.touches[0].clientY - my_touches_start.clientY) < 10 &&
                     touchRange(my_touches_start)
                 ) {
+                    my_touches_rate = view.currentPlayer.getPlaybackRate();
                     window.navigator.vibrate(15);
-                    view.currentPlayer.setPlaybackRate(2);
-
-                    my_touches_rate = 2;
+                    view.currentPlayer.setPlaybackRate(my_touches_rate * 2);
                     view.boundHideOsd();
                     require(["toast"], function (toast) {
-                        toast("2.0 倍数");
+                        toast(my_touches_rate * 2 + " 倍数");
                     });
                 }
             }, 700);
@@ -203,7 +202,7 @@
             my_touches_time = null;
         }
         if (my_touches_rate != null) {
-            view.currentPlayer.setPlaybackRate(1);
+            view.currentPlayer.setPlaybackRate(my_touches_rate);
             my_touches_rate = null;
         }
         dragByGuesture = false;
@@ -234,7 +233,7 @@
             my_touches_time = null;
         }
         if (my_touches_rate != null) {
-            view.currentPlayer.setPlaybackRate(1);
+            view.currentPlayer.setPlaybackRate(my_touches_rate);
             my_touches_rate = null;
         }
         dragByGuesture = false;
