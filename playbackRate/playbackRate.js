@@ -70,6 +70,7 @@
             viewnode = null, view = null;
         }
     });
+
     function keydownEvent(event) {
         var key = event.key;
         if (keydownFlag || !keyMap[key]) {
@@ -107,7 +108,8 @@
                     my_touches_rate === null &&
                     !view.nowPlayingPositionSlider.dragging &&
                     Math.abs(e.touches[0].clientX - my_touches_start.clientX) < 10 &&
-                    Math.abs(e.touches[0].clientY - my_touches_start.clientY) < 10
+                    Math.abs(e.touches[0].clientY - my_touches_start.clientY) < 10 &&
+                    touchRange(my_touches_start)
                 ) {
                     window.navigator.vibrate(15);
                     view.currentPlayer.setPlaybackRate(2);
@@ -126,52 +128,53 @@
         if (dragByGuesture || (!view.nowPlayingPositionSlider.dragging && my_touches_start != null && my_touches_rate === null)) {
             var x = e.touches[0].pageX - my_touches_start.pageX;
             var y = e.touches[0].pageY - my_touches_start.pageY;
-            var centerX = window.innerWidth / 2;
-            if ((my_touches_type === null && Math.abs(x) > 20) || my_touches_type === "play") {
-                if (my_touches_type === null) {
-                    my_touches_type = "play";
-                    my_touches_start = e.touches[0];
-                    my_touches_nowvalue = nowPlayingSliderValue;
-                } else {
-                    my_touches_value = my_touches_func(e.touches[0], x, my_touches_nowvalue, screen.width, true);
-                    dragByGuesture = true;
-                    view.nowPlayingPositionSlider.beginEditing(my_touches_value);
-                }
-            } else if (Math.abs(y) > 20 || my_touches_type === "volume" || my_touches_type === "bright") {
-                if ((Math.abs(x) < 20 && Math.abs(y) > 20 && my_touches_type === null && my_touches_start.pageX >= screen.width / 2) || my_touches_type === "volume") {
+            if (touchRange(my_touches_start)) {
+                if ((my_touches_type === null && Math.abs(x) > 20) || my_touches_type === "play") {
                     if (my_touches_type === null) {
+                        my_touches_type = "play";
                         my_touches_start = e.touches[0];
-                        my_touches_type = "volume";
-                        my_touches_nowvalue = view.currentPlayer.getVolume();
-                        videoOsdVolumeControls.classList.add("videoOsdVolumeControls-showhover");
-                        videoOsdVolumeControls.classList.remove("videoOsdVolumeControls-hidetouch", "hide");
-                        videoOsdVolumeControls.style.setProperty("display", "flex", "important");
-                        videoOsdVolumeSliderWrapper.style.setProperty("display", "flex", "important");
+                        my_touches_nowvalue = nowPlayingSliderValue;
                     } else {
-                        my_touches_value = Math.floor(my_touches_func(e.touches[0], y, my_touches_nowvalue, screen.height, false));
-                        if (view.currentPlayer.getVolume() != my_touches_value) {
-                            nowPlayingVolumeSlider.setValue(my_touches_value);
-                            view.currentPlayer.setVolume(my_touches_value);
-                        }
+                        my_touches_value = my_touches_func(e.touches[0], x, my_touches_nowvalue, screen.width, true);
+                        dragByGuesture = true;
+                        view.nowPlayingPositionSlider.beginEditing(my_touches_value);
                     }
-                    view.boundShowOsdDefaultParams();
-                } else if ((Math.abs(x) < 20 && Math.abs(y) > 20 && my_touches_type === null && my_touches_start.pageX < screen.width / 2) || my_touches_type === "bright") {
-                    if (my_touches_type === null) {
-                        my_touches_start = e.touches[0];
-                        my_touches_type = "bright";
-                        my_touches_nowvalue = view.currentPlayer.getBrightness();
-                        brightnessSliderContainer.classList.remove("hide");
-                        brightnessSliderContainer.style.setProperty("display", "flex", "important");
-                    } else {
-                        my_touches_value = Math.floor(
-                            my_touches_func(e.touches[0], y, my_touches_nowvalue, screen.height, false)
-                        );
-                        if (view.currentPlayer.getBrightness() != my_touches_value) {
-                            brightnessSlider.setValue(my_touches_value);
-                            view.currentPlayer.setBrightness(my_touches_value);
+                } else if (Math.abs(y) > 20 || my_touches_type === "volume" || my_touches_type === "bright") {
+                    if ((Math.abs(x) < 20 && Math.abs(y) > 20 && my_touches_type === null && my_touches_start.pageX >= screen.width / 2) || my_touches_type === "volume") {
+                        if (my_touches_type === null) {
+                            my_touches_start = e.touches[0];
+                            my_touches_type = "volume";
+                            my_touches_nowvalue = view.currentPlayer.getVolume();
+                            videoOsdVolumeControls.classList.add("videoOsdVolumeControls-showhover");
+                            videoOsdVolumeControls.classList.remove("videoOsdVolumeControls-hidetouch", "hide");
+                            videoOsdVolumeControls.style.setProperty("display", "flex", "important");
+                            videoOsdVolumeSliderWrapper.style.setProperty("display", "flex", "important");
+                        } else {
+                            my_touches_value = Math.floor(my_touches_func(e.touches[0], y, my_touches_nowvalue, screen.height, false));
+                            if (view.currentPlayer.getVolume() != my_touches_value) {
+                                nowPlayingVolumeSlider.setValue(my_touches_value);
+                                view.currentPlayer.setVolume(my_touches_value);
+                            }
                         }
+                        view.boundShowOsdDefaultParams();
+                    } else if ((Math.abs(x) < 20 && Math.abs(y) > 20 && my_touches_type === null && my_touches_start.pageX < screen.width / 2) || my_touches_type === "bright") {
+                        if (my_touches_type === null) {
+                            my_touches_start = e.touches[0];
+                            my_touches_type = "bright";
+                            my_touches_nowvalue = view.currentPlayer.getBrightness();
+                            brightnessSliderContainer.classList.remove("hide");
+                            brightnessSliderContainer.style.setProperty("display", "flex", "important");
+                        } else {
+                            my_touches_value = Math.floor(
+                                my_touches_func(e.touches[0], y, my_touches_nowvalue, screen.height, false)
+                            );
+                            if (view.currentPlayer.getBrightness() != my_touches_value) {
+                                brightnessSlider.setValue(my_touches_value);
+                                view.currentPlayer.setBrightness(my_touches_value);
+                            }
+                        }
+                        view.boundShowOsdDefaultParams();
                     }
-                    view.boundShowOsdDefaultParams();
                 }
             }
         }
@@ -246,5 +249,15 @@
             my_touches_nowvalue = step;
         }
         return step;
+    }
+    function touchRange(touch) {
+        var margin = 20;
+        if (touch.clientX > margin &&
+            touch.clientX < screen.width - margin &&
+            touch.clientY > margin &&
+            touch.clientY < screen.height - margin) {
+            return true;
+        }
+        return false;
     }
 })();
