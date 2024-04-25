@@ -127,7 +127,7 @@
             var x = e.touches[0].pageX - my_touches_start.pageX;
             var y = e.touches[0].pageY - my_touches_start.pageY;
             var centerX = window.innerWidth / 2;
-            if ((my_touches_type === null && Math.abs(x) > 20 && Math.abs(e.touches[0].pageX - centerX) < 100) || my_touches_type === "play") {
+            if ((my_touches_type === null && Math.abs(x) > 20) || my_touches_type === "play") {
                 if (my_touches_type === null) {
                     my_touches_type = "play";
                     my_touches_start = e.touches[0];
@@ -137,7 +137,7 @@
                     dragByGuesture = true;
                     view.nowPlayingPositionSlider.beginEditing(my_touches_value);
                 }
-            } else if (Math.abs(y) > 60 || my_touches_type === "volume" || my_touches_type === "bright") {
+            } else if (Math.abs(y) > 20 || my_touches_type === "volume" || my_touches_type === "bright") {
                 if ((Math.abs(x) < 20 && Math.abs(y) > 20 && my_touches_type === null && my_touches_start.pageX >= screen.width / 2) || my_touches_type === "volume") {
                     if (my_touches_type === null) {
                         my_touches_start = e.touches[0];
