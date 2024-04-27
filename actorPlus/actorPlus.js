@@ -15,7 +15,7 @@
         if (e.detail.path === "/item" || e.detail.type === "video-osd") {
             if (!e.detail.isRestored) {
                 const mutation = new MutationObserver(async function () {
-                    item = e.target.controller?.currentItem || e.target.controller?.videoOsd?.currentItem;
+                    item = e.target.controller?.currentItem || e.target.controller?.videoOsd?.currentItem || e.target.controller?.currentPlayer?.streamInfo?.item;
                     if (item) {
                         mutation.disconnect();
                         if (showFlag()) {
