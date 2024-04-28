@@ -37,37 +37,42 @@
         "5": { rate: 3.5, message: "3.5 倍数" },
         "6": { rate: 4, message: "4.0 倍数" },
     };
+    var isTouchDevice = 'ontouchstart' in document.documentElement;
     document.addEventListener("viewbeforeshow", function (e) {
         if (e.detail.type === "video-osd") {
-            window.addEventListener("keydown", keydownEvent);
-            window.addEventListener("keyup", keyupEvent);
             viewnode = e.target;
             view = viewnode.controller.videoOsd ?? viewnode.controller;
-            videoOsdVolumeControls = viewnode.querySelector(".videoOsdVolumeControls"),
-                brightnessSlider = viewnode.querySelector(".videoOsdBrightnessSlider"),
-                brightnessSliderContainer = viewnode.querySelector(".brightnessSliderContainer"),
-                videoOsdVolumeSliderWrapper = viewnode.querySelector(".videoOsdVolumeSliderWrapper"),
-                nowPlayingVolumeSlider = viewnode.querySelector(".videoOsdVolumeSlider"),
-                nowPlayingSliderValue = view.nowPlayingPositionSlider.valueAsNumber;
-            my_touches_type = null;
-            my_touches_start = null;
-            my_touches_value = 0;
-            my_touches_nowvalue = 0;
-            my_touches_rate = null;
-            my_touches_time = null;
-            dragByGuesture = false;
-            viewnode.addEventListener("touchstart", touchstartEvent);
-            viewnode.addEventListener("touchmove", touchmoveEvent);
-            viewnode.addEventListener("touchcancel", touchcancelEvent);
-            viewnode.addEventListener("touchend", touchendEvent);
+            window.addEventListener("keydown", keydownEvent);
+            window.addEventListener("keyup", keyupEvent);
+            if (isTouchDevice) {
+                videoOsdVolumeControls = viewnode.querySelector(".videoOsdVolumeControls"),
+                    brightnessSlider = viewnode.querySelector(".videoOsdBrightnessSlider"),
+                    brightnessSliderContainer = viewnode.querySelector(".brightnessSliderContainer"),
+                    videoOsdVolumeSliderWrapper = viewnode.querySelector(".videoOsdVolumeSliderWrapper"),
+                    nowPlayingVolumeSlider = viewnode.querySelector(".videoOsdVolumeSlider"),
+                    nowPlayingSliderValue = view.nowPlayingPositionSlider.valueAsNumber;
+                my_touches_type = null;
+                my_touches_start = null;
+                my_touches_value = 0;
+                my_touches_nowvalue = 0;
+                my_touches_rate = null;
+                my_touches_time = null;
+                dragByGuesture = false;
+                viewnode.addEventListener("touchstart", touchstartEvent);
+                viewnode.addEventListener("touchmove", touchmoveEvent);
+                viewnode.addEventListener("touchcancel", touchcancelEvent);
+                viewnode.addEventListener("touchend", touchendEvent);
+            }
         } else {
             window.removeEventListener("keydown", keydownEvent);
             window.removeEventListener("keyup", keyupEvent);
-            viewnode?.removeEventListener("touchstart", touchstartEvent);
-            viewnode?.removeEventListener("touchmove", touchmoveEvent);
-            viewnode?.removeEventListener("touchcancel", touchcancelEvent);
-            viewnode?.removeEventListener("touchend", touchendEvent);
-            viewnode = null, view = null;
+            if (isTouchDevice) {
+                viewnode?.removeEventListener("touchstart", touchstartEvent);
+                viewnode?.removeEventListener("touchmove", touchmoveEvent);
+                viewnode?.removeEventListener("touchcancel", touchcancelEvent);
+                viewnode?.removeEventListener("touchend", touchendEvent);
+                viewnode = null, view = null;
+            }
         }
     });
 
