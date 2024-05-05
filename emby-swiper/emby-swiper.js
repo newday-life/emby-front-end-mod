@@ -701,7 +701,7 @@ class HomeSwiper {
 			},
 		});
 	}
-	static async initBanner(e) {
+	static async initBanner() {
 		const banner = `
 		<div class="verticalSection verticalSection-cards section00 focusable emby-scrollbuttons-scroller" data-focusabletype="nearest">
 			<div class="padded-top-focusscale padded-bottom-focusscale padded-left padded-left-page padded-right emby-scroller hiddenScrollX scrollFrameX" data-mousewheel="false" data-focusscroll="true">
