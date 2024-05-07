@@ -14,7 +14,7 @@ class HomeSwiper {
 		this.logoOptions = { type: "Logo", maxWidth: 500, adjustForPixelRatio: false };
 		this.coverOptions = { type: "Primary", maxWidth: 1000, adjustForPixelRatio: false };
 
-		this.itemQuery.Limit = 9;
+		this.itemQuery.Limit = 50;
 		this.showItemNum = 9;
 		this.loadFlag = false;
 		this.flag_cssjs = true;
@@ -595,6 +595,40 @@ class HomeSwiper {
 		}
 		return JSON.parse(sessionStorage.getItem("CACHE|getItems" + (query.ParentId ? query.ParentId : '') + ApiClient.getCurrentUserId() + "-" + ApiClient.serverId()));
 	}
+	static async getLibItems(refreshFlag) {
+		if (refreshFlag || !localStorage.getItem("CACHE|getLibItems" + ApiClient.getCurrentUserId() + "-" + ApiClient.serverId())) {
+			this.cacheRefreshFlag = false;
+			let libdata = await ApiClient.getUserViews({}, ApiClient.getCurrentUserId());
+			let libdataitem = libdata.Items;
+			let Alldata = [];
+			for (let i = 0; i < libdataitem.length; ++i) {
+				let libitem = libdataitem[i]
+				if (libitem.CollectionType && libitem.CollectionType === "homevideos") {
+					this.itemQuery.ImageTypes = "Primary";
+				} else {
+					this.itemQuery.ImageTypes = "Backdrop";
+				}
+				this.itemQuery.ParentId = libitem.Id;
+				let dataquery = await this.getItems(this.itemQuery);
+				if (dataquery.Items.length === 0) {
+					dataquery = await this.getItems({
+						ImageTypes: "Backdrop", EnableImageTypes: "Primary,Backdrop,Banner,Logo",
+						IncludeItemTypes: "Movie,Series", SortBy: "Random",
+						Recursive: true, ImageTypeLimit: 1, Limit: this.itemQuery.Limit, Fields: "Taglines,Overview",
+						EnableUserData: true, EnableTotalRecordCount: false
+					});
+				}
+				dataquery.Items.length > this.showItemNum && (dataquery.Items = this.getRandomArrayElements(dataquery.Items, this.showItemNum));
+				dataquery.Items.length !== 0 &&
+					Alldata.push({ Id: libitem.Id, Name: libitem.Name, ImageTags: libitem.ImageTags, CollectionType: libitem.CollectionType, data: dataquery.Items });
+			}
+			const data = JSON.stringify(Alldata);
+			localStorage.setItem("CACHE|getLibItems" + ApiClient.getCurrentUserId() + "-" + ApiClient.serverId(), data);
+		} else {
+			this.cacheRefreshFlag = true;
+		}
+		return JSON.parse(localStorage.getItem("CACHE|getLibItems" + ApiClient.getCurrentUserId() + "-" + ApiClient.serverId()));
+	}
 	static getImageUrl(item, options) {
 		var imgUrl, width = options.maxWidth, imageTags = item.ImageTags, adjustForPixelRatio = options.adjustForPixelRatio;
 		return options.type == "Thumb" && imageTags && imageTags.Thumb ? (imgUrl = ApiClient.getImageUrl(item.Id, {
@@ -638,69 +672,7 @@ class HomeSwiper {
 			}, speed);
 		}
 	}
-	static createSwiperEl(swiperEl, idx, interleaveOffset) {
-		new Swiper(swiperEl, {
-			direction: this.Alldata[idx].CollectionType === "homevideos" ? "horizontal" : "vertical",
-			spaceBetween: 0,
-			speed: 1000,
-			nested: true,
-			watchSlidesProgress: this.Alldata[idx].CollectionType === "homevideos" ? false : true,
-			pagination: {
-				el: ".swiper-pagination",
-				clickable: true,
-			},
-			navigation: {
-				nextEl: ".swiper-button-next.swiper-child-button",
-				prevEl: ".swiper-button-prev.swiper-child-button",
-				disabledClass: 'my-button-disabled',
-			},
-			autoplay: {
-				delay: 10e3,
-				disableOnInteraction: false,
-			},
-			on: {
-				progress: function (swiper) {
-					for (var i = 0; i < swiper.slides.length; i++) {
-						var slideProgress = swiper.slides[i].progress;
-						var innerOffset = swiper.height * interleaveOffset;
-						var innerTranslate = slideProgress * innerOffset;
-						swiper.slides[i].querySelector(".banner-cover") && (swiper.slides[i].querySelector(".banner-cover").style.transform =
-							"translate3d(0," + innerTranslate + "px, 0)");
-					}
-				},
-				touchStart: function (swiper) {
-					for (var i = 0; i < swiper.slides.length; i++) {
-						swiper.slides[i].style.transition = "";
-					}
-				},
-				setTransition: function (swiper, speed) {
-					for (var i = 0; i < swiper.slides.length; i++) {
-						swiper.slides[i].style.transition = speed + "ms";
-						swiper.slides[i].querySelector(".banner-cover") && (swiper.slides[i].querySelector(".banner-cover").style.transition =
-							speed + "ms");
-					}
-				},
-				reachEnd: function (swiper) {
-					if (swiper.initialized) {
-						swiper.autoplay.stop();
-						setTimeout(() => {
-							this.swiper2.slideNext();
-						}, 10e3);
-						setTimeout(() => {
-							swiper.slideTo(0);
-						}, 11e3);
-					}
-				}.bind(this),
-			},
-			slidesPerView: 1,
-			breakpoints: {
-				1000: {
-					slidesPerView: this.Alldata[idx].CollectionType === "homevideos" ? 3 : 1,
-					slidesPerGroup: this.Alldata[idx].CollectionType === "homevideos" ? 3 : 1,
-				},
-			},
-		});
-	}
+	
 	static async initBanner() {
 		const banner = `
 		<div class="verticalSection verticalSection-cards section00 focusable emby-scrollbuttons-scroller" data-focusabletype="nearest">
@@ -719,30 +691,7 @@ class HomeSwiper {
 			</div>
 		</div>`;
 		document.querySelector(".view:not(.hide) .sections").insertAdjacentHTML('beforebegin', banner);
-		let libdata = await ApiClient.getUserViews({}, ApiClient.getCurrentUserId());
-		let libdataitem = libdata.Items;
-		this.Alldata = [];
-		for (let i = 0; i < libdataitem.length; ++i) {
-			let libitem = libdataitem[i]
-			if (libitem.CollectionType && libitem.CollectionType === "homevideos") {
-				this.itemQuery.ImageTypes = "Primary";
-			} else {
-				this.itemQuery.ImageTypes = "Backdrop";
-			}
-			this.itemQuery.ParentId = libitem.Id;
-			let dataquery = await this.getItems(this.itemQuery);
-			if (dataquery.Items.length === 0) {
-				dataquery = await this.getItems({
-					ImageTypes: "Backdrop", EnableImageTypes: "Primary,Backdrop,Banner,Logo",
-					IncludeItemTypes: "Movie,Series", SortBy: "Random",
-					Recursive: true, ImageTypeLimit: 1, Limit: this.itemQuery.Limit, Fields: "Taglines,Overview",
-					EnableUserData: true, EnableTotalRecordCount: false
-				});
-			}
-			dataquery.Items.length > this.showItemNum && (dataquery.Items = this.getRandomArrayElements(dataquery.Items, this.showItemNum));
-			dataquery.Items.length !== 0 &&
-				this.Alldata.push({ Id: libitem.Id, Name: libitem.Name, ImageTags: libitem.ImageTags, CollectionType: libitem.CollectionType, data: dataquery.Items });
-		}
+		this.Alldata = await this.getLibItems(false);
 		if (this.Alldata.length == 0) {
 			document.getElementById("customCss").remove();
 			document.querySelector(".section00").remove();
@@ -940,16 +889,20 @@ class HomeSwiper {
 							swiper.autoplay.stop();
 							this.swiper2Delay = setTimeout(() => {
 								this.swiper2.slideNext();
-								setTimeout(() => {
-									swiper.slideTo(0);
-								}, 1e3);
 							}, 10e3);
+							this.swiperDelay = setTimeout(() => {
+								swiper.slideTo(0);
+							}, 11e3);
 
 						}
 					}.bind(this),
 					slideChange: function (swiper) {
-						clearTimeout(this.swiper2Delay);
-					},
+						if (swiper.slides.length !== swiper.activeIndex + 1){
+							clearTimeout(this.swiperDelay);
+							clearTimeout(this.swiper2Delay);
+						}
+							
+					}.bind(this),
 				},
 				slidesPerView: 1,
 				breakpoints: {
@@ -998,8 +951,8 @@ class HomeSwiper {
 					}
 				},
 				slideChange: function (swiper) {
-					clearTimeout(this.swiper2Delay);
 					if (swiper.initialized) {
+						clearTimeout(this.swiper2Delay);
 						let activeSwiper = swiper.slides[swiper.activeIndex].childNodes[1].swiper;
 						let previousSwiper = swiper.slides[swiper.previousIndex].childNodes[1].swiper;
 						if (swiper.activeIndex !== swiper.previousIndex && previousSwiper.swiper) {
@@ -1012,7 +965,6 @@ class HomeSwiper {
 								this.swiper2Delay = setTimeout(() => {
 									this.swiper2.slideNext();
 								}, 10e3);
-
 							} else {
 								activeSwiper.params.autoplay = {
 									delay: 10e3,
@@ -1034,6 +986,9 @@ class HomeSwiper {
 			},
 		});
 		this.initEvent();
+		if (this.cacheRefreshFlag) {
+			this.getLibItems(true);
+		}
 	}
 	static async initEvent() {
 		var mouseoverflag = false;
