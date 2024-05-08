@@ -975,6 +975,14 @@ class HomeSwiper {
 			this.swiper.slides[i].onmouseleave = function () {
 				clearTimeout(this.mouseovertimeout);
 			}.bind(this);
+			this.swiper.slides[i].onfocus = function () {
+				this.focustimeout = setTimeout(function () {
+					this.swiper2.slideTo(this.swiper2.slides.findIndex(m => m.dataset.swiperSlideIndex == i));
+				}.bind(this), 100);
+			}.bind(this);
+			this.swiper.slides[i].onblur = function () {
+				clearTimeout(this.focustimeout);
+			}.bind(this);
 		}
 		this.playlistener();
 	}
