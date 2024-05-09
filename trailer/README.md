@@ -3,5 +3,5 @@
 
 代码参考Bolin Chan的项目https://github.com/bolin-dev/JavPack 中的JavDB.trailer.user.js，特此致谢！
 
-https://github.com/newday-life/emby-front-end-mod/assets/25839463/d4826e18-9d8e-4360-8f72-d58189d4af5d
+[预告片](https://github.com/newday-life/emby-front-end-mod/blob/main/trailer/2024-03-28%2022-53-09-110.mp4)
 
