@@ -11,8 +11,10 @@
 ## 效果说明：
 | 序号 | 名称 | 描述 |  
 | :---: | :--- | :--- |  
-| 1 | itemSortForNewDevice | 修改新设备媒体库各标签默认排序 |  
-| 2 | actorPlus | 隐藏没有头像的演员和制作人员 |  
-| 3 | emby-swiper | 主页轮播图 |  
+| 1 | actorPlus | 隐藏没有头像的演员和制作人员 |  
+| 2 | emby-swiper | 主页轮播图 |  
+| 3 | emby-tab | 自定义隐藏emby页面顶部中间导航栏按钮 |  
 | 4 | fanart_show | 显示同人图（fanart图） |
-| 5 | playbackRate | 小秘同款播放页手势及按键交互体验 |
+| 5 | itemSortForNewDevice | 修改新设备媒体库各标签默认排序 |  
+| 6 | playbackRate | 小秘同款播放页手势及按键交互体验 |
+| 7 | trailer | Emby影视卡片鼠标悬停播放（预告） |
