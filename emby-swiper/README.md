@@ -10,3 +10,5 @@
   }
 }
 ```
+### 预览图
+![d972613a8037308f90e7968933444b9](https://github.com/jackloves111/emby-front-end-mod/assets/89971817/48a4b66c-a412-4f67-8dab-d4e96354d5c8)
