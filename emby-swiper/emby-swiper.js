@@ -423,7 +423,8 @@ class HomeSwiper {
 			-webkit-mask-image: linear-gradient(to top, transparent 0%, black 6px);
 			mask-image: linear-gradient(to top, transparent 0%, black 6px);
 		  }
-		  .view[data-type="home"]:not(.home-horiz)>div:nth-child(1) .scrollSlider.padded-top-page {
+		  .view[data-type="home"]:not(.home-horiz)>div:nth-child(1) .scrollSlider.padded-top-page,
+		  .view-home-home:not(.home-horiz)>div:nth-child(1) .scrollSlider.padded-top-page {
 			padding-top: 0 !important;
 		  }
 		  .misty-loading {
@@ -473,6 +474,7 @@ class HomeSwiper {
 			!document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
 			if (!e.detail.isRestored) {
 				!this.loadFlag && e.detail.contextPath.endsWith("home") && this.initLoading();
+				e.target.setAttribute("data-type", "home");
 				this.init();
 			} else {
 				this.swiper = e.target.querySelector('.mySwiper').swiper;
@@ -519,7 +521,6 @@ class HomeSwiper {
 	});
 	}
 	static async init() {
-		document.querySelector(".view:not(.hide)").setAttribute("data-type", "home");
 		const serverName = await ApiClient.serverName();
 		let loading = document.querySelector(".misty-loading h1");
 		loading && (loading.innerText = serverName, loading.setAttribute("title", serverName), loading.classList.add("active"));
