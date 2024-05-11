@@ -764,7 +764,7 @@ class HomeSwiper {
 					};
 				},
 				tap: function (swiper, event) {
-					if (event.target.classList?.contains("small-banner") && event.target.parentNode.classList.contains("swiper-slide-thumb-active")) {
+					if (event.target.classList?.contains("small-banner") && event.target.closest(".swiper-slide").classList.contains("swiper-slide-thumb-active")) {
 						Emby.Page.showItem(event.target.id);
 					};
 				},
