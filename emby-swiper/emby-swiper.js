@@ -356,9 +356,6 @@ class HomeSwiper {
 			.section00 {
 			  height: min(80vh, 148.5vw) !important;
 			}
-			.misty-loading h1 {
-			  font-size: 2em !important;
-			}
 			.mySwiper .swiper-slide:not(.swiper-slide-thumb-active),
 			.mySwiper .cardContent-shadow,
 			img.small-banner {
@@ -427,45 +424,6 @@ class HomeSwiper {
 		  .view-home-home:not(.home-horiz)>div:nth-child(1) .scrollSlider.padded-top-page {
 			padding-top: 0 !important;
 		  }
-		  .misty-loading {
-			z-index: 99999999;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 1);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-		  }
-		  div.dialogContainer {
-			z-index: 999999999 !important;
-		  }
-		  .misty-loading h1 {
-			margin: 0;
-			margin-bottom: 3rem;
-			text-transform: uppercase;
-			transition: 0.8s;
-			transform: scale(1.15);
-			opacity: 0;
-			font-size: 4em;
-		  }
-		  .misty-loading h1.active {
-			transform: scale(1);
-			opacity: 1;
-		  }
-		  .misty-loading .mdl-spinner {
-			margin: 0;
-			position: initial;
-		  }
-		  .misty-loading .mdl-spinner__layer-1 {
-			border-color: #fff;
-		  }
-		  .mdl-spinner {
-			zoom: 0.5;
-		  }
         `;
 	document.addEventListener("viewbeforeshow", async function (e) {
 		this.flag_cssjs = false;
@@ -473,9 +431,7 @@ class HomeSwiper {
 			!document.getElementById("SwiperCss") && CommonUtils.loadExtastyle(this.SwiperCss, 'SwiperCss');
 			!document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
 			if (!e.detail.isRestored) {
-				!this.loadFlag && e.detail.contextPath.endsWith("home") && this.initLoading();
-				e.target.setAttribute("data-type", "home");
-				this.init();
+				this.initBanner(e.target);
 			} else {
 				this.swiper = e.target.querySelector('.mySwiper').swiper;
 				this.swiper2 = e.target.querySelector('.mySwiper-main').swiper;
@@ -509,8 +465,7 @@ class HomeSwiper {
 			this.mutation_cssjs.disconnect();
 			!document.getElementById("SwiperCss") && CommonUtils.loadExtastyle(this.SwiperCss, 'SwiperCss');
 			!document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
-			!this.loadFlag && this.initLoading();
-			this.init();
+			this.initBanner(document.querySelector(".view:not(.hide)"));
 			this.flag_cssjs = false;
 		}
 	}.bind(this));
@@ -519,22 +474,6 @@ class HomeSwiper {
 		characterData: true,
 		subtree: true,
 	});
-	}
-	static async init() {
-		const serverName = await ApiClient.serverName();
-		let loading = document.querySelector(".misty-loading h1");
-		loading && (loading.innerText = serverName, loading.setAttribute("title", serverName), loading.classList.add("active"));
-		this.initBanner();
-	}
-	static initLoading() {
-		this.loadFlag = true;
-		const load = `
-		<div class="misty-loading">
-			<h1></h1>
-			<div class="mdl-spinner"><div class="mdl-spinner__layer mdl-spinner__layer-1"><div class="mdl-spinner__circle-clipper mdl-spinner__left"><div class="mdl-spinner__circle mdl-spinner__circleLeft"></div></div><div class="mdl-spinner__circle-clipper mdl-spinner__right"><div class="mdl-spinner__circle mdl-spinner__circleRight"></div></div></div></div>
-		</div>
-		`;
-		document.body.insertAdjacentHTML('beforeend', load);
 	}
 	static async playlistener() {
 		const playbackmanager = (await require(["./modules/common/playback/playbackmanager.js"]))[0];
@@ -635,7 +574,7 @@ class HomeSwiper {
 		}
 	}
 	
-	static async initBanner() {
+	static async initBanner(e) {
 		const banner = `
 		<div class="verticalSection verticalSection-cards section00 focusable emby-scrollbuttons-scroller" data-focusabletype="nearest">
 			<div class="padded-top-focusscale padded-bottom-focusscale padded-left padded-left-page padded-right emby-scroller hiddenScrollX scrollFrameX" data-mousewheel="false" data-focusscroll="true">
@@ -652,12 +591,11 @@ class HomeSwiper {
 				</div>
 			</div>
 		</div>`;
-		document.querySelector(".view:not(.hide) .sections").insertAdjacentHTML('beforebegin', banner);
+		e.querySelector(".sections").insertAdjacentHTML('beforebegin', banner);
 		this.Alldata = await this.getLibItems(false);
 		if (this.Alldata.length == 0) {
 			document.getElementById("customCss").remove();
 			document.querySelector(".section00").remove();
-			this.fadeOut(document.querySelector(".misty-loading"), 500, () => document.querySelector(".misty-loading").remove());
 			return;
 		}
 		const html = { Swiper: "", coverHtml: "" };
@@ -722,10 +660,9 @@ class HomeSwiper {
 			html.Swiper += mySwiper;
 			html.coverHtml += coverHtml;
 		}
-		document.querySelector(".view:not(.hide) .mySwiper-main .swiper-wrapper").insertAdjacentHTML('beforeend', html.Swiper);
+		e.querySelector(".mySwiper-main .swiper-wrapper").insertAdjacentHTML('beforeend', html.Swiper);
 		var interleaveOffset = 0.5;
-		document.querySelector(".view:not(.hide) .mySwiper .swiper-wrapper").insertAdjacentHTML('beforeend', html.coverHtml);
-		this.fadeOut(document.querySelector(".misty-loading"), 500, () => document.querySelector(".misty-loading").remove());
+		e.querySelector(".mySwiper .swiper-wrapper").insertAdjacentHTML('beforeend', html.coverHtml);
 		this.swiper = new Swiper(".view:not(.hide) .mySwiper", {
 			loop: true,
 			spaceBetween: 0,
