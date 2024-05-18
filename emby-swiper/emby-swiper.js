@@ -562,18 +562,7 @@ class HomeSwiper {
 		}
 		return shuffled.slice(min);
 	}
-	static fadeOut(elemt, speed, callback) {
-		if (elemt?.style.opacity == 1 || elemt?.style.opacity == "") {
-			elemt.style.transition = `opacity ${speed}ms`;
-			elemt.style.opacity = '0';
-			setTimeout(function () {
-				if (typeof (callback) == 'function') {
-					callback();
-				}
-			}, speed);
-		}
-	}
-	
+
 	static async initBanner(e) {
 		const banner = `
 		<div class="verticalSection verticalSection-cards section00 focusable emby-scrollbuttons-scroller" data-focusabletype="nearest">
