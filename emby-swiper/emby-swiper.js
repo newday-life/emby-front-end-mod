@@ -431,6 +431,7 @@ class HomeSwiper {
 			!document.getElementById("SwiperCss") && CommonUtils.loadExtastyle(this.SwiperCss, 'SwiperCss');
 			!document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
 			if (!e.detail.isRestored) {
+				e.target.setAttribute("data-type", "home");
 				this.initBanner(e.target);
 			} else {
 				this.swiper = e.target.querySelector('.mySwiper').swiper;
