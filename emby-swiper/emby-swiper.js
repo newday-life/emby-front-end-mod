@@ -432,7 +432,21 @@ class HomeSwiper {
 			!document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
 			if (!e.detail.isRestored) {
 				e.target.setAttribute("data-type", "home");
-				this.initBanner(e.target);
+				// this.initBanner(e.target);
+				this.mutation = new MutationObserver(async function (mutationRecoards) {
+					for (let mutationRecoard of mutationRecoards) {
+						if (mutationRecoard.target.classList.contains("homeSectionsContainer")) {
+							this.mutation.disconnect();
+							this.initBanner(e.target);
+							break;
+						}
+					}
+				}.bind(this));
+				this.mutation.observe(document.body, {
+					childList: true,
+					characterData: true,
+					subtree: true,
+				});
 			} else {
 				this.swiper = e.target.querySelector('.mySwiper').swiper;
 				this.swiper2 = e.target.querySelector('.mySwiper-main').swiper;
@@ -563,7 +577,6 @@ class HomeSwiper {
 		}
 		return shuffled.slice(min);
 	}
-
 	static async initBanner(e) {
 		const banner = `
 		<div class="verticalSection verticalSection-cards section00 focusable emby-scrollbuttons-scroller" data-focusabletype="nearest">
@@ -581,7 +594,7 @@ class HomeSwiper {
 				</div>
 			</div>
 		</div>`;
-		e.querySelector(".sections").insertAdjacentHTML('beforebegin', banner);
+		e.querySelector(".sections").insertAdjacentHTML('afterbegin', banner);
 		this.Alldata = await this.getLibItems(false);
 		if (this.Alldata.length == 0) {
 			document.getElementById("customCss").remove();
@@ -639,7 +652,7 @@ class HomeSwiper {
 			const coverHtml = `
 			<div class="swiper-slide card  card-hoverable focusable" tabindex="0">
 			<div class="cardBox cardBox-touchzoom">
-				<button type="button" data-action="link" tabindex="-1" class="itemAction cardContent-button cardContent cardImageContainer cardContent-shadow cardContent-bxsborder-fv coveredImage cardScalable cardPadder-backdrop">
+				<button type="button" data-action="link" tabindex="-1" class="itemAction cardContent-button cardContent cardImageContainer cardContent-shadow cardContent-bxsborder cardContent-bxsborder-fv coveredImage cardScalable cardPadder-backdrop">
 				<img draggable="false" alt=" "  loading="lazy" decoding="async" class="small-banner cardImage cardImage-bxsborder-fv coveredImage coveredImage-noScale" id="${datas.Id}" src="${await this.getImageUrl(datas, this.coverOptions)}" />
 				</button>
 				<div class="cardLibText">
@@ -653,7 +666,7 @@ class HomeSwiper {
 		e.querySelector(".mySwiper-main .swiper-wrapper").insertAdjacentHTML('beforeend', html.Swiper);
 		var interleaveOffset = 0.5;
 		e.querySelector(".mySwiper .swiper-wrapper").insertAdjacentHTML('beforeend', html.coverHtml);
-		this.swiper = new Swiper(".view:not(.hide) .mySwiper", {
+		this.swiper = new Swiper(e.querySelector(".mySwiper"), {
 			loop: true,
 			spaceBetween: 0,
 			slidesPerView: 1,
@@ -740,7 +753,7 @@ class HomeSwiper {
 			},
 		});
 		for (let i = 0; i < this.Alldata.length; ++i) {
-			let swiperchild = new Swiper(".view:not(.hide) .mySwiper" + i, {
+			let swiperchild = new Swiper(e.querySelector(".mySwiper"+ i), {
 				direction: this.Alldata[i].CollectionType === "homevideos" ? "horizontal" : "vertical",
 				spaceBetween: 0,
 				speed: 1000,
@@ -807,7 +820,7 @@ class HomeSwiper {
 			});
 			i > 0 && swiperchild.disable();
 		}
-		this.swiper2 = new Swiper(".view:not(.hide) .mySwiper-main", {
+		this.swiper2 = new Swiper(e.querySelector(".mySwiper-main"), {
 			loop: true,
 			speed: 1000,
 			spaceBetween: 0,
