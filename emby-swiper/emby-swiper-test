@@ -542,8 +542,15 @@ class HomeSwiper {
 			}
 			const data = JSON.stringify(Alldata);
 			localStorage.setItem("CACHE|getLibItems" + ApiClient.getCurrentUserId() + "-" + ApiClient.serverId(), data);
+			require(["datetime"], function (datetime) {
+				localStorage.setItem('CACHE|Movies-Date', datetime.toLocaleDateString(new Date(), { dateStyle: "short" }))
+			});
 		} else {
-			this.cacheRefreshFlag = true;
+			require(["datetime"], function (datetime) {
+				if (localStorage.getItem('CACHE|Movies-Date') !== datetime.toLocaleDateString(new Date(), { dateStyle: "short" })) {
+					this.cacheRefreshFlag = true;
+				}
+			}.bind(this));
 		}
 		return JSON.parse(localStorage.getItem("CACHE|getLibItems" + ApiClient.getCurrentUserId() + "-" + ApiClient.serverId()));
 	}
