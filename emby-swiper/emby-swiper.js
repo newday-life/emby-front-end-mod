@@ -623,9 +623,9 @@ class HomeSwiper {
 				};
 				const backdropHtml = `
 						<div class="swiper-slide" id="${detail.Id}">			
-							<img id="${detail.Id}" data-parentid="${datas.Id}"  class="banner-cover ${hvclass}" draggable="false" loading="${j === 0 ? 'lazy' : 'lazy'}" decoding="async" src="${ImageUrl}" />
+							<img id="${detail.Id}" data-parentid="${datas.Id}"  class="banner-cover ${hvclass}" draggable="false" loading="${j === 0 ? 'eager' : 'lazy'}" decoding="async" src="${ImageUrl}" />
 							`+ ((detail.ImageTags && detail.ImageTags.Logo) ? `
-							<img draggable="false" loading="${j === 0 ? 'lazy' : 'lazy'}" decoding="async" class="banner-logo padded-right" src="${await this.getImageUrl(detail, this.logoOptions)}">` : ``) + `
+							<img draggable="false" loading="${j === 0 ? 'eager' : 'lazy'}" decoding="async" class="banner-logo padded-right" src="${await this.getImageUrl(detail, this.logoOptions)}">` : ``) + `
 							<div class="banner-mask"></div>
 							<div class="custom padded-left">
 							<div class="title" data-swiper-parallax="-300">${detail.Name}</div>
@@ -653,7 +653,7 @@ class HomeSwiper {
 			<div class="swiper-slide card  card-hoverable focusable" tabindex="0">
 			<div class="cardBox cardBox-touchzoom">
 				<button type="button" data-action="link" tabindex="-1" class="itemAction cardContent-button cardContent cardImageContainer cardContent-shadow cardContent-bxsborder cardContent-bxsborder-fv coveredImage cardScalable cardPadder-backdrop">
-				<img draggable="false" alt=" "  loading="lazy" decoding="async" class="small-banner cardImage cardImage-bxsborder-fv coveredImage coveredImage-noScale" id="${datas.Id}" src="${await this.getImageUrl(datas, this.coverOptions)}" />
+				<img draggable="false" alt=" "  loading="eager" decoding="async" class="small-banner cardImage cardImage-bxsborder-fv coveredImage coveredImage-noScale" id="${datas.Id}" src="${await this.getImageUrl(datas, this.coverOptions)}" />
 				</button>
 				<div class="cardLibText">
 				<button class="itemAction textActionButton cardTextActionButton emby-button" type="button" title="${datas.Name}" tabindex="-1">${datas.Name}</button>
