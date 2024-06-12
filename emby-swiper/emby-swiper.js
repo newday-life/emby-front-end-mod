@@ -101,9 +101,6 @@ class HomeSwiper {
 		  .swiper-slide {
 			overflow: hidden;
 		  }
-		  .small-banner {
-			background: cadetblue;
-		  }
 		  .banner-cover {
 			display: -webkit-box;
 			display: -ms-flexbox;
@@ -652,7 +649,7 @@ class HomeSwiper {
 			const coverHtml = `
 			<div class="swiper-slide card card-hoverable focusable card-autoactive" tabindex="0" data-index="${i}">
 			<div class="cardBox cardBox-touchzoom">
-				<button type="button" data-action="link" tabindex="-1" class="itemAction cardContent-button cardContent cardImageContainer cardContent-bxsborder cardContent-bxsborder-fv coveredImage coveredImage-noScale cardPadder-backdrop">
+				<button type="button" data-action="link" tabindex="-1" class="itemAction cardContent-button cardContent cardImageContainer cardContent-background cardContent-bxsborder cardContent-bxsborder-fv coveredImage coveredImage-noScale cardPadder-backdrop">
 					<img draggable="false" alt=" "  loading="eager" decoding="async" class="small-banner cardImage cardImage-bxsborder-fv coveredImage coveredImage-noScale" id="${datas.Id}" src="${await this.getImageUrl(datas, this.coverOptions)}" />
 				</button>
 				<div class="cardLibText">
