@@ -355,7 +355,7 @@ class HomeSwiper {
 			}
 			.mySwiper .swiper-slide:not(.swiper-slide-thumb-active),
 			.mySwiper .cardContent-shadow,
-			img.small-banner {
+			.mySwiper .cardContent-background {
 			  opacity: 0;
 			}
 			.mySwiper .swiper-slide {
