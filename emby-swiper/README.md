@@ -10,5 +10,8 @@
   }
 }
 ```
+2024-11-19 添加背景播放预告片:emby-swiper-trailer.js;
+注意：如果之前使用过emby-swiper;换成emby-swiper-trailer.js第二天生效；
+或者在设置-主页-改变一下轮播设置，使得原缓存失效（缓存保存一天；0点起）
 ### 预览图
 ![d972613a8037308f90e7968933444b9](https://github.com/jackloves111/emby-front-end-mod/assets/89971817/48a4b66c-a412-4f67-8dab-d4e96354d5c8)
