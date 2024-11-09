@@ -693,7 +693,7 @@ class HomeSwiper {
             }.bind(this)
             this.swiper.slides[i].onmouseover = function () {
                 this.mouseovertimeout = setTimeout(function () {
-                    this.swiper2.slideTo(this.swiper2.slides.findIndex(m => m.dataset.swiperSlideIndex == i));
+                    (i !== this.swiper2.realIndex) && this.swiper2.slideTo(this.swiper2.slides.findIndex(m => m.dataset.swiperSlideIndex == i));
                 }.bind(this), 300);
             }.bind(this);
             this.swiper.slides[i].onmouseleave = function () {
@@ -701,7 +701,7 @@ class HomeSwiper {
             }.bind(this);
             this.swiper.slides[i].onfocus = function () {
                 this.focustimeout = setTimeout(function () {
-                    this.swiper2.slideTo(this.swiper2.slides.findIndex(m => m.dataset.swiperSlideIndex == i));
+                    (i !== this.swiper2.realIndex) && this.swiper2.slideTo(this.swiper2.slides.findIndex(m => m.dataset.swiperSlideIndex == i));
                 }.bind(this), 100);
             }.bind(this);
             this.swiper.slides[i].onblur = function () {
