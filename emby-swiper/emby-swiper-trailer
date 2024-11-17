@@ -17,6 +17,7 @@ class HomeSwiper {
         this.showItemNum = 9;
         this.loadFlag = false;//是否已经加载
         this.flag_cssjs = true;//是否是cssjs插件加载，修复cssjs插件加载首次可能不运行的问题
+        this.cleared = 1;
         this.SwiperCss = `
 /**
  * Swiper 11.1.14
@@ -84,9 +85,9 @@ class HomeSwiper {
         document.addEventListener("viewbeforeshow", async function (e) {
             this.flag_cssjs = false;
             if (e.detail.type === "home") {
-                !document.getElementById("SwiperCss") && CommonUtils.loadExtastyle(this.SwiperCss, 'SwiperCss');
-                !document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
                 if (!e.detail.isRestored) {
+                    !document.getElementById("SwiperCss") && CommonUtils.loadExtastyle(this.SwiperCss, 'SwiperCss');
+                    !document.getElementById("customCss") && CommonUtils.loadExtastyle(this.customCss, 'customCss');
                     let swiperLibraryAccess = localStorage.getItem(ApiClient.getCurrentUserId() + "-swiperLibraryAccess");
                     this.user = swiperLibraryAccess ? JSON.parse(swiperLibraryAccess) : { Policy: { EnableAllFolders: true, EnabledFolders: [] } };
                     !localStorage.getItem('CACHE|Movies-Date') && !this.loadFlag && e.detail.contextPath.endsWith("home") && this.initLoading();
@@ -107,6 +108,7 @@ class HomeSwiper {
                     this.swiper2 = e.target.querySelector('.mySwiper-main').swiper;
                     this.swiper2?.enable();
                     this.swiper2?.slides[this.swiper2.activeIndex]?.childNodes[1].swiper?.autoplay.start();
+                    this.swiper & setTimeout(() => Emby.Page.setTitle("每日推荐"), 1000);
                 }
 
             } else {
@@ -120,7 +122,6 @@ class HomeSwiper {
                     if (!e.detail.isRestored) {
                         let swiperLibraryAccess = localStorage.getItem(ApiClient.getCurrentUserId() + "-swiperLibraryAccess");
                         this.user = swiperLibraryAccess ? JSON.parse(swiperLibraryAccess) : { Policy: { EnableAllFolders: true, EnabledFolders: [] } };
-                        let formhtml = e.target.children[0].children[0].innerHTML
                         let selectHomePhotoCarouselHtml = `
 						<div class="verticalSection">
 
@@ -147,7 +148,7 @@ class HomeSwiper {
 						<br />
 						</div>`;
                         var view = e.target;
-                        view.children[0].children[0].innerHTML = selectHomePhotoCarouselHtml + formhtml;
+                        view.children[0].children[0].insertAdjacentHTML('afterbegin', selectHomePhotoCarouselHtml);
                         await ApiClient.getUserViews({}, ApiClient.getCurrentUserId()).then(function (mediaFolders) {
                             mediaFolders = mediaFolders.Items;
                             renderMediaFolders(view, this.user, mediaFolders);
@@ -627,14 +628,17 @@ class HomeSwiper {
                             swiper.autoplay.stop();
                             this.swiper2Delay = setTimeout(() => {
                                 this.swiper2.slideNext();
+                                this.cleared = 2;
                             }, 20e3);
                             this.swiperDelay = setTimeout(() => {
                                 swiper.slideTo(0);
+                                this.cleared = 3;
                             }, 21e3);
 
                         }
                     }.bind(this),
                     slideChange: function (swiper) {
+                        this.cleared = 1;
                         if (swiper.slides.length !== swiper.activeIndex + 1) {
                             clearTimeout(this.swiperDelay);
                             clearTimeout(this.swiper2Delay);
@@ -648,7 +652,7 @@ class HomeSwiper {
                             button.setAttribute("tabindex", "-1");
                         });
                         if (this.player) { this.player.destroy(); this.player = null;}
-						this.showVideoOverlay(swiper)
+			this.showVideoOverlay(swiper)
 
                     }.bind(this),
                 },
@@ -707,7 +711,9 @@ class HomeSwiper {
                         let activemorebutton = activeSwiper.slides[activeSwiper.activeIndex].querySelectorAll(".morebutton button");
                         if (swiper.activeIndex !== swiper.previousIndex && previousSwiper) {
                             previousSwiper.autoplay.stop();
-                            previousSwiper.disable();
+                            let disableInterval = setTimeout(() => {
+				this.cleared !== 2 && (clearTimeout(disableInterval), previousSwiper.disable());
+                            }, 1e3);
                             previousmorebutton.forEach((button) => {
                                 button.setAttribute("tabindex", "-1");
                             });
