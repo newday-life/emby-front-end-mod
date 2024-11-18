@@ -760,8 +760,16 @@ class HomeSwiper {
 				}.bind(this),
 				init: function (swiper) {
 					let activeSwiper = swiper.slides[swiper.activeIndex].childNodes[1].swiper;
-					if (this.player) { this.player.destroy(); this.player = null; }
-					activeSwiper && this.showVideoOverlay(activeSwiper);
+					if (activeSwiper) {
+						activeSwiper.params.autoplay = {
+							delay: 20e3,
+							disableOnInteraction: true,
+							stopOnLastSlide: true,
+						};
+						activeSwiper.autoplay.start();
+						if (this.player) { this.player.destroy(); this.player = null; }
+						this.showVideoOverlay(activeSwiper);
+					}
 				}.bind(this),
 			},
 			pagination: {
