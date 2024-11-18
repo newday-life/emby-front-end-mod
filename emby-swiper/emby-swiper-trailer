@@ -193,14 +193,11 @@ class HomeSwiper {
 			if (e.target.location.hash === "#!/home") {
 				let activeswiper = this.swiper2?.slides[this.swiper2.activeIndex].childNodes[1].swiper;
 				if (e.target.visibilityState === "hidden") {
-					if (this.player) { this.player.destroy(); this.player = null; }
-					if (activeswiper) {
-						activeswiper.autoplay.stop();
-						let activebannerCover = activeswiper.slides[activeswiper.activeIndex].querySelector(".banner-cover");
-						activebannerCover.style.display = "block";
-					}
+					this.player && this.player.pauseVideo();
+					activeswiper?.autoplay.stop();
 				} else {
-					activeswiper.autoplay.start();
+					activeswiper?.autoplay.start();
+					this.player && this.player.playVideo();
 				}
 			}
 		}.bind(this));
