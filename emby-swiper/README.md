@@ -10,7 +10,7 @@
   }
 }
 ```
-2024-11-19 添加背景播放预告片:emby-swiper-trailer.js;
+2024-11-19 添加背景播放youtube的预告片（前提有刮削到）:emby-swiper-trailer.js;
 注意：如果之前使用过emby-swiper;换成emby-swiper-trailer.js第二天生效；
 或者在设置-主页-改变一下轮播设置，使得原缓存失效（缓存保存一天；0点起）
 ### 预览图
