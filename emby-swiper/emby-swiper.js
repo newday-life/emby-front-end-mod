@@ -17,7 +17,6 @@ class HomeSwiper {
 		this.showItemNum = 9;
 		this.loadFlag = false;//是否已经加载
 		this.flag_cssjs = true;//是否是cssjs插件加载，修复cssjs插件加载首次可能不运行的问题
-		this.cleared = 1;
 		this.SwiperCss = `
 		/**
 		 * Swiper 11.1.14
@@ -560,17 +559,15 @@ class HomeSwiper {
 							swiper.autoplay.stop();
 							this.swiper2Delay = setTimeout(() => {
 								this.swiper2.slideNext();
-								this.cleared = 2;
 							}, 20e3);
 							this.swiperDelay = setTimeout(() => {
 								swiper.slideTo(0);
-								this.cleared = 3;
+								swiper.disable();
 							}, 21e3);
 
 						}
 					}.bind(this),
 					slideChange: function (swiper) {
-						this.cleared = 1;
 						if (swiper.slides.length !== swiper.activeIndex + 1) {
 							clearTimeout(this.swiperDelay);
 							clearTimeout(this.swiper2Delay);
@@ -641,9 +638,9 @@ class HomeSwiper {
 						let activemorebutton = activeSwiper.slides[activeSwiper.activeIndex].querySelectorAll(".morebutton button");
 						if (swiper.activeIndex !== swiper.previousIndex && previousSwiper) {
 							previousSwiper.autoplay.stop();
-							let disableInterval = setTimeout(() => {
-								this.cleared !== 2 && (clearTimeout(disableInterval), previousSwiper.disable());
-							}, 1e3);
+							if (previousSwiper.realIndex + 1 !== previousSwiper.slides.length) {
+								previousSwiper.disable();
+							};
 							previousmorebutton.forEach((button) => {
 								button.setAttribute("tabindex", "-1");
 							});
