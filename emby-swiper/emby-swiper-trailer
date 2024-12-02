@@ -162,7 +162,6 @@ class HomeSwiper {
 						view.querySelector(".chkAllFolder").addEventListener("change", function () {
 							for (var checked = this.checked, elems = view.querySelectorAll('.chkFolder'), i = 0, length = elems.length; i < length; i++)
 								elems[i].checked = checked;
-							console.warn("e.checked:", this.checked);
 						});
 						view.querySelector(".chkEnableAllFolders").checked
 							? view.querySelector(".folderAccessListContainer").classList.add("hide")
@@ -244,7 +243,7 @@ class HomeSwiper {
 
 	}
 	static async playlistener() {
-		const playbackmanager = (await require(["./modules/common/playback/playbackmanager.js"]))[0];
+		const playbackmanager = (await require(["playbackManager"]))[0];
 		document.querySelectorAll(".view:not(.hide) .banner-item-play").forEach(async (dom, i) => {
 			let id = dom.getAttribute("id");
 			let parentid = dom.getAttribute("data-parentid");
@@ -253,7 +252,7 @@ class HomeSwiper {
 				let resume = {
 					startPositionTicks: detail.UserData["PlaybackPositionTicks"], ids: detail.Id, serverId: detail.ServerId, items: [detail]
 				};
-				playbackmanager.default.play(resume);
+				playbackmanager.play(resume);
 			});
 		});
 	}
